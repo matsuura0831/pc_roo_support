@@ -58,10 +58,10 @@ def load():
         ag.click(x + dx, y + dy)
         time.sleep(1)
 
-    while len(ag.getWindowsWithTitle("ラグオリ")) < nb_client:
+    while len(ag.getWindowsWithTitle(TITLE_CLIENT)) < nb_client:
         time.sleep(1)
 
-    apps = ag.getWindowsWithTitle("ラグオリ")
+    apps = sorted(ag.getWindowsWithTitle(TITLE_CLIENT), key=lambda x: x._hWnd)
     for i, (x, y, w, h) in enumerate(data):
         app = apps[i]
         app.activate()
