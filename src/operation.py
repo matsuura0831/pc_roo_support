@@ -16,7 +16,7 @@ import pyautogui as ag
 import pyperclip
 
 CRNT_DIR = os.path.dirname(__file__)
-SAVE_DIR = os.path.join(CRNT_DIR, "saved")
+SAVE_DIR = os.path.join(CRNT_DIR, "..", "saved")
 
 WINDOW_TITLE_CLIENT = "ラグオリ"
 
@@ -26,9 +26,10 @@ HOTKEY_OPERATION_RECORD_AND_PLAY = pynput.keyboard.Key.f5
 HOTKEY_OPERATION_RECORD = pynput.keyboard.Key.f6
 HOTKEY_OPERATION_PLAY = pynput.keyboard.Key.f7
 HOTKEY_OPERATION_PLAY_ALL = pynput.keyboard.Key.f8
-HOTKEY_OPERATION_STOP = pynput.keyboard.Key.f1
+HOTKEY_OPERATION_STOP = pynput.keyboard.Key.f2
 HOTKEY_SAVE = pynput.keyboard.Key.f9
 HOTKEY_LOAD = pynput.keyboard.Key.f10
+HOTKEY_HELP = pynput.keyboard.Key.f1
 
 class Operation(Flag):
     MOUSE = auto()
@@ -153,8 +154,9 @@ def help():
     print(f"HOTKEY_OPERATION_PLAY_ALL = {HOTKEY_OPERATION_PLAY_ALL}")
     print(f"HOTKEY_SAVE = {HOTKEY_SAVE}")
     print(f"HOTKEY_LOAD = {HOTKEY_LOAD}")
-    print(f"HELP = 'h'")
+    print(f"HOTKEY_HELP = {HOTKEY_HELP}")
     print(f"EXIT = 'q'")
+
 
 def main():
     help()
@@ -182,7 +184,7 @@ def main():
 
         if op == Operation.KEYBOARD_CHAR_RELEASE and args[0] == "q":
             break
-        elif op == Operation.KEYBOARD_CHAR_RELEASE and args[0] == "h":
+        if op == Operation.KEYBOARD_SPECIAL_RELEASE and args[0] == HOTKEY_HELP:
             help()
             continue
 
@@ -324,7 +326,7 @@ def main():
                         if key == pynput.keyboard.Key.esc:
                             records.append([op, elapsed, [key.name]])
 
-                fpath = os.path.join(SAVE_DIR, "tmp.pkl")
+                fpath = os.path.join(SAVE_DIR, "latest_operations.pkl")
                 with open(fpath,  "wb") as f:
                     pickle.dump(records, f)
 

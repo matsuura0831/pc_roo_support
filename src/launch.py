@@ -10,7 +10,7 @@ DETACHED_PROCESS = 0x00000008
 CREATE_NEW_PROCESS_GROUP = 0x00000200
 
 CRNT_DIR = os.path.dirname(__file__)
-SAVE_FILE = os.path.join(CRNT_DIR, "clients.json")
+SAVE_FILE = os.path.join(CRNT_DIR, "..", "saved", "clients.json")
 
 REL_POINT_RUNCH_BTN = (1000, 700)
 

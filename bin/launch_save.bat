@@ -11,5 +11,5 @@ if %errorlevel% neq 0 (
 cd %~dp0/..
 call .env/Scripts/activate
 cd src
-python multi_operation.py
+python launch.py save
 

@@ -11,5 +11,5 @@ if %errorlevel% neq 0 (
 cd %~dp0/..
 call .env/Scripts/activate
 cd src
-python multi_invoke.py save
+python launch.py
 
