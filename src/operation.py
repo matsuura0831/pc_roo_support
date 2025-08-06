@@ -326,7 +326,7 @@ def main():
                         if key == pynput.keyboard.Key.esc:
                             records.append([op, elapsed, [key.name]])
 
-                fpath = os.path.join(SAVE_DIR, "latest_operations.pkl")
+                fpath = os.path.join(SAVE_DIR, "latest.pkl")
                 with open(fpath,  "wb") as f:
                     pickle.dump(records, f)
 

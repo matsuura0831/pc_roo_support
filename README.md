@@ -15,11 +15,11 @@ pip install -r requirements.txt
 
 以降は所望のバッチファイルを起動する
 
-* multi_invoke_save.bat: 現在開いているクライアントの数、位置、サイズを記憶する
-* multi_invoke.bat: 記憶されている通りにクライアントを開く
-* multi_operation.bat: 複数のクライアントに対して特定の操作を順次実行していく
+* launch_save.bat: 現在開いているクライアントの数、位置、サイズを記憶する
+* launch_load.bat: 記憶されている通りにクライアントを開く
+* operation.bat: 特定の操作を記録して複数のクライアントに対して順次実行する
 
-## multi_operation
+## operation.bat
 
 起動後に以下のコマンドを利用できる
 
