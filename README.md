@@ -1,8 +1,8 @@
-# multi-click
+# roo_pc
 
 # インストール
 
-pythonをインストール: https://www.python.org/
+pythonをインストール: https://www.python.org/downloads/windows/
 
 PATHが通ったら本プロジェクトのルートディレクトリ直下でコマンドラインを開いて下記を入力する。
 
@@ -18,6 +18,10 @@ pip install -r requirements.txt
 * launch_save.bat: 現在開いているクライアントの数、位置、サイズを記憶する
 * launch_load.bat: 記憶されている通りにクライアントを開く
 * operation.bat: 特定の操作を記録して複数のクライアントに対して順次実行する
+
+# launch_load.bat
+
+ランチャーのインストール場所を変えている場合は`src/launch.py`の20行目の`PATH_TO_LAUNCHER`の値をインストール先に変更する。
 
 ## operation.bat
 
