@@ -26,6 +26,7 @@ HOTKEY_OPERATION_RECORD_AND_PLAY = pynput.keyboard.Key.f5
 HOTKEY_OPERATION_RECORD = pynput.keyboard.Key.f6
 HOTKEY_OPERATION_PLAY = pynput.keyboard.Key.f7
 HOTKEY_OPERATION_PLAY_ALL = pynput.keyboard.Key.f8
+HOTKEY_OPERATION_STOP = pynput.keyboard.Key.f1
 HOTKEY_SAVE = pynput.keyboard.Key.f9
 HOTKEY_LOAD = pynput.keyboard.Key.f10
 
@@ -104,7 +105,7 @@ def apply_operation(*args):
         for app in apps:
             ag.press("alt")
             app.activate()
-            time.sleep(0.2)
+            time.sleep(0.5)
 
             for op, elapsed, args in records:
                 if not q.empty():
@@ -121,15 +122,18 @@ def apply_operation(*args):
                     y = int(win_h * per_y) + win_y
 
                     if op == Operation.MOUSE_LEFT_PRESS:
-                        ag.mouseDown(x, y, duration=elapsed)
+                        time.sleep(elapsed)
+                        ag.mouseDown(x, y)
                     elif op == Operation.MOUSE_MOVE:
                         ag.moveTo(x, y, duration=elapsed)
                     elif op == Operation.MOUSE_LEFT_RELEASE:
                         ag.mouseUp(x, y, duration=elapsed)
                 elif op == Operation.KEYBOARD_CHAR_RELEASE:
-                    # クリップボードに追加して貼り付ける
-                    pyperclip.copy(args)
-                    ag.hotkey('ctrl', 'v')
+                    # # クリップボードに追加して貼り付ける
+                    # pyperclip.copy(args)
+                    # ag.hotkey('ctrl', 'v')
+                    time.sleep(elapsed)
+                    ag.hotkey(args)
                 elif op == Operation.KEYBOARD_SPECIAL_RELEASE:
                     ag.hotkey(*args)
             if is_interrupt:
@@ -183,14 +187,14 @@ def main():
             continue
 
         if op == Operation.START_OPERATION:
-            print(f"Start Operation ... please input {HOTKEY_OPERATION_RECORD_AND_PLAY} if you want interrupt operation sequence.")
+            print(f"Start Operation ... please input {HOTKEY_OPERATION_STOP} if you want interrupt operation sequence.")
             is_threading = True
             q_stop = args
         elif op == Operation.STOP_OPERATION:
             print("Stop Operation")
             is_threading = False
             q_stop = None
-        elif is_threading and (op & Operation.KEYBOARD_SPECIAL_RELEASE) and args[0] == HOTKEY_OPERATION_RECORD_AND_PLAY:
+        elif is_threading and (op & Operation.KEYBOARD_SPECIAL_RELEASE) and args[0] == HOTKEY_OPERATION_STOP:
             print("Interrupt Operation")
             if q_stop is not None:
                 q_stop.put(True)
@@ -308,16 +312,21 @@ def main():
                     elif op == Operation.KEYBOARD_CHAR_RELEASE:
                         char = args[0]
 
-                        if len(records) > 0 and records[-1][0] == Operation.KEYBOARD_CHAR_RELEASE:
-                            # 文字を打っていた場合、前のに追加する
-                            records[-1][2] += char
-                        else:
-                            records.append([op, elapsed, char])
+                        records.append([op, elapsed, char])
+                        # if len(records) > 0 and records[-1][0] == Operation.KEYBOARD_CHAR_RELEASE:
+                        #     # 文字を打っていた場合、前のに追加する
+                        #     records[-1][2] += char
+                        # else:
+                        #     records.append([op, elapsed, char])
                     elif op == Operation.KEYBOARD_SPECIAL_RELEASE:
                         key = args[0]
 
                         if key == pynput.keyboard.Key.esc:
                             records.append([op, elapsed, [key.name]])
+
+                fpath = os.path.join(SAVE_DIR, "tmp.pkl")
+                with open(fpath,  "wb") as f:
+                    pickle.dump(records, f)
 
                 for i, (op, t, args) in enumerate(records):
                     print(f"{i}. {op}, {t:.3f}, {args}")
